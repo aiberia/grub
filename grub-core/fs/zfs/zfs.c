@@ -285,6 +285,7 @@ static const char *spa_feature_names[] = {
   "com.delphix:embedded_data",
   "com.delphix:extensible_dataset",
   "org.open-zfs:large_blocks",
+  "org.zfsonlinux:large_dnode",
   NULL
 };
 
@@ -2705,6 +2706,9 @@ dnode_get (dnode_end_t * mdn, grub_uint64_t objnum, grub_uint8_t type,
   buf->endian = endian;
   if (type && buf->dn.dn_type != type) 
     return grub_error(GRUB_ERR_BAD_FS, "incorrect dnode type"); 
+
+  if (buf->dn.dn_extra_slots != 0)
+    return grub_error(GRUB_ERR_BAD_FS, "unsupported large dnode found");
 
   return GRUB_ERR_NONE;
 }
